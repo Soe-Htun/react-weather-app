@@ -22,31 +22,36 @@ const HourlyForecastComponent: React.FC<Props> = ({ hourly }) => {
       if (modifier === "PM" && hours < 12) hours += 12;
       if (modifier === "AM" && hours === 12) hours = 0;
 
-      const forecastTime = new Date(
+      const forecastDate = new Date(
         now.getFullYear(),
         now.getMonth(),
-        today,
+        now.getDate(),
         hours,
         minutes
       );
 
-      return { ...h, forecastTime };
+      if (forecastDate.getTime() <= now.getTime()) {
+        forecastDate.setDate(forecastDate.getDate() + 1);
+      }
+
+      return { ...h, forecastTime: forecastDate };
     })
-    .filter((h): h is HourlyForecast & { forecastTime: Date } => {
-      return !!h && h.forecastTime.getTime() > now.getTime();
-    })
+    .filter((h): h is HourlyForecast & { forecastTime: Date } => !!h)
+    .sort((a, b) => a.forecastTime.getTime() - b.forecastTime.getTime())
     .slice(0, 4);
 
   return (
-    <div className="grid grid-cols-4 gap-2 w-full">
+    <div className="grid grid-cols-4 gap-x-6 w-full">
       {upcomingHours.map((h, idx) => (
         <div
           key={idx}
-          className="flex flex-col items-center bg-white rounded-lg p-2 w-full"
+          className="flex flex-col items-center justify-between bg-[#f5f5f5] rounded-lg w-full h-30 p-2 shadow-md"
         >
-          <span className="text-sm">{idx === 0 ? "Now" : h.hour}</span>
-          <span className="text-2xl">{getWeatherEmoji(h.icon)}</span>
-          <span className="text-sm font-semibold">{Math.round(h.temp)}°</span>
+          <span className="text-5xl">{getWeatherEmoji(h.icon)}</span>
+          <div className="space-y-2 text-center">
+            <p className="text-sm font-semibold">{Math.round(h.temp)}°</p>
+            <p className="text-sm">{idx === 0 ? "Now" : h.hour}</p>
+          </div>
         </div>
       ))}
     </div>

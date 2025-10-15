@@ -7,11 +7,9 @@ import WeatherDetails from "./pages/WeatherDetails";
 const App: React.FC = () => {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route element={<DefaultLayout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/weather/:city" element={<WeatherDetails />} />
-        </Route>
+       <Routes>
+        <Route path="/" element={<DefaultLayout><Home /></DefaultLayout>} />
+        <Route path="/weather/:city" element={<WeatherDetails />} />
       </Routes>
     </BrowserRouter>
   );

@@ -8,11 +8,21 @@ interface Props {
 
 const WeeklyForecastComponent: React.FC<Props> = ({ weekly }) => {
   return (
-    <div className="space-y-2">
-      {weekly.slice(0,4).map((day, idx) => (
-        <div key={idx} className="flex justify-between items-center bg-white rounded-lg p-2 px-4">
-          <span className="font-medium">{day.day}</span>
-          <span className="text-2xl">{getWeatherEmoji(day.icon)}</span>
+    <div className="space-y-3">
+      {weekly.slice(0, 4).map((day, idx) => (
+        <div
+          key={idx}
+          className="flex justify-between items-center bg-secondary rounded-lg py-3 px-4"
+        >
+          <div className="flex gap-3 items-center">
+            <span className="text-4xl bg-[#9ab6ff] pt-2 rounded-full w-16 h-16 text-center">
+              {getWeatherEmoji(day.icon)}
+            </span>
+            <div>
+              <p className="font-medium">{day.day}</p>
+              <p>{day.condition}</p>
+            </div>
+          </div>
           <span>{Math.round(day.temp)}°</span>
         </div>
       ))}

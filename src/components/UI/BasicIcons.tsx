@@ -34,7 +34,7 @@ const Icons: React.FC<IconsProps> = ({ name, className }) => {
         >
           <path
             d="M8.78799 12L14.798 18.01L16.212 16.596L11.612 11.996L16.212 7.39599L14.798 5.98999L8.78799 12Z"
-            fill="black"
+            fill="white"
           />
         </svg>
       );
