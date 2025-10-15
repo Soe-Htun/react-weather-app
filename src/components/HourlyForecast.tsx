@@ -8,7 +8,6 @@ interface Props {
 
 const HourlyForecastComponent: React.FC<Props> = ({ hourly }) => {
   const now = new Date();
-  const today = now.getDate();
   const upcomingHours = hourly
     .map((h) => {
       if (!h.hour) return null;

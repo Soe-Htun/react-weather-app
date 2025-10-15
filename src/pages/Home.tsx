@@ -56,7 +56,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     fetchCurrentLocation();
-  }, []);
+  }, [dispatch]);
 
   return (
     <div className="flex flex-col items-center justify-center w-full space-y-4 p-4">
