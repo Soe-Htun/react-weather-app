@@ -14,47 +14,43 @@ const Home: React.FC = () => {
     (state: RootState) => state.weather.currentWeather
   );
   const dispatch = useDispatch();
-  const fetchCurrentLocation = () => {
-    if (!navigator.geolocation) {
-      console.warn("Geolocation is not supported by this browser.");
-      return;
-    }
-
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        const { latitude, longitude } = position.coords;
-
-        try {
-          const weatherData = await fetchWeatherByCoords(latitude, longitude);
-
-          const currentWeather = {
-            id: weatherData.id,
-            name: weatherData.name || "Unknown",
-            country: weatherData?.sys?.country || "N/A",
-            weather: weatherData.weather || [],
-            timezone: weatherData.timezone,
-            coord: {
-              lat: latitude,
-              lon: longitude,
-            },
-            main: {
-              temp: weatherData.main?.temp ?? 0,
-              temp_max: weatherData.main?.temp_max ?? 0,
-              temp_min: weatherData.main?.temp_min ?? 0,
-            },
-          };
-
-          dispatch(setCurrentWeather(currentWeather));
-        } catch (error) {
-          console.error("Error fetching current location weather:", error);
-        }
-      },
-      (error) => console.error("Geolocation error:", error),
-      // { enableHighAccuracy: true }
-    );
-  };
-
   useEffect(() => {
+    const fetchCurrentLocation = () => {
+      if (!navigator.geolocation) {
+        console.warn("Geolocation is not supported by this browser.");
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+
+          try {
+            const weatherData = await fetchWeatherByCoords(latitude, longitude);
+
+            const currentWeather = {
+              id: weatherData.id,
+              name: weatherData.name || "Unknown",
+              country: weatherData?.sys?.country || "N/A",
+              weather: weatherData.weather || [],
+              timezone: weatherData.timezone,
+              coord: { lat: latitude, lon: longitude },
+              main: {
+                temp: weatherData.main?.temp ?? 0,
+                temp_max: weatherData.main?.temp_max ?? 0,
+                temp_min: weatherData.main?.temp_min ?? 0,
+              },
+            };
+
+            dispatch(setCurrentWeather(currentWeather));
+          } catch (error) {
+            console.error("Error fetching current location weather:", error);
+          }
+        },
+        (error) => console.error("Geolocation error:", error)
+      );
+    };
+
     fetchCurrentLocation();
   }, [dispatch]);
 
@@ -67,7 +63,11 @@ const Home: React.FC = () => {
       {/* Current Weather Card */}
       {currentWeather && (
         <div className="w-full max-w-md">
-          <WeatherCard key={currentWeather.id} city={currentWeather} isCurrentWeather />
+          <WeatherCard
+            key={currentWeather.id}
+            city={currentWeather}
+            isCurrentWeather
+          />
         </div>
       )}
 
